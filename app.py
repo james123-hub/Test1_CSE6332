@@ -29,13 +29,14 @@ allowed_ext = app.config['ALLOWED_EXTENSIONS'] # List of accepted extensions
 blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
 @app.route('/', methods = ["GET","POST"])
-def hello_world():
+def Name():
     photo_name = 'm-1.jpg'
     image = Image.open(photo_name)
     data=io.BytesIO()
     image.save(data,"JPEG")
     encoded_img_data = base64.b64encode(data.getvalue())
-    return render_template("Name.html",photo_name=encoded_img_data.decode('UTF-8'))
+    p = encoded_img_data.decode('UTF-8')
+    return render_template("Name.html",photo_name=p)
 
 @app.route('/user', methods = ["POST"])
 def user():
@@ -105,4 +106,4 @@ def picture():
     return render_template("picture.html",tables=[df.to_html()],titles=['name','income','comments'],image_name=pdict)
  
 if __name__ == "__main__":
- app.run(host='0.0.0.0', port=8000, debug = True)
+    app.run(debug = True)
