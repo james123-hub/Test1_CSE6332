@@ -1,0 +1,28 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title> Table and Images </title>              
+    </head>
+    <body>
+        <div align="center">
+            <table>
+                <h1>
+                    {% for table in tables %}
+                    <h2>{{titles[loop.index]}}</h2>  
+                             
+                    {{ table|safe }}
+                    {% endfor %}  
+                <IMAGES>
+                    {% for key, value in image_name.items() -%}
+                    {{key}}<br>
+                    <img src="{{ url_for('static', filename=value) }}" ><br>
+                    {% endfor %}
+                             
+                    <body>
+                    
+                </h1> 
+            </table>
+        </div>
+    </body>
+</html>
