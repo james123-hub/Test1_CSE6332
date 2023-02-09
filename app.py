@@ -30,13 +30,13 @@ blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
 @app.route('/', methods = ["GET","POST"])
 def Name():
-    photo_name = 'dave.jpg'
+    photo_name = 'd-1.jpg'
     image = Image.open(photo_name)
     data=io.BytesIO()
     image.save(data,"JPEG")
     encoded_img_data = base64.b64encode(data.getvalue())
     p = encoded_img_data.decode('UTF-8')
-    return render_template('Name.html',photo_name=p)
+    return render_template("Name.html",photo_name=p)
 
 @app.route('/user', methods = ["POST"])
 def user():
@@ -84,12 +84,12 @@ def nameinc():
     df = pd.read_csv("data-1.csv",on_bad_lines='skip')
     df_op = pd.DataFrame()
     name = request.form["name"]
-    inc = request.form["sal1"]
+    year = request.form["sal1"]
     comments = request.form["text"]
     #df_op = df.loc[df.name == name, ['name','income', 'comments']] = name,inc, comments
-    df.loc[df.name == name, ['name','income', 'comments']] = name,inc, comments
+    df.loc[df.name == name, ['name','year', 'comments']] = name,year, comments
     df.to_csv ("data-1.csv", index = None, header=True)
-    return render_template('update.html',name=name,tables=[df.to_html()],titles=['name','income','comments'],comments=comments)
+    return render_template('update.html',name=name,tables=[df.to_html()],titles=['name','year','comments'],comments=comments)
 
 @app.route('/picture', methods = ["GET","POST"])
 def picture():
@@ -101,24 +101,7 @@ def picture():
     df.to_csv ("data-1.csv", index = None, header=True)
     pdict = zip(df.name,df.picture)
     pdict=dict(pdict)
-    return render_template("picture.html",tables=[df.to_html()],titles=['name','income','comments'],image_name=pdict)
-
-@app.route('/upload', methods = ["GET","POST"])
-def upload():
-    if request.method == 'POST':
-        img = request.files['file']
-        #if img and allowed_file(img.filename):
-        filename = secure_filename(img.filename)
-        img.save(filename)
-        blob_client = blob_service_client.get_blob_client(container = container, blob = filename)
-        with open(filename, "rb") as data:
-                try:
-                    blob_client.upload_blob(data, overwrite=True)
-                    #msg = "Upload Done ! "
-                except:
-                    pass
-        #os.remove(filename)
-    return render_template("upload.html")
-
+    return render_template("picture.html",tables=[df.to_html()],titles=['name','year','comments'],image_name=pdict)
+ 
 if __name__ == "__main__":
     app.run(debug = True)
