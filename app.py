@@ -101,9 +101,24 @@ def picture():
     df.to_csv ("data-1.csv", index = None, header=True)
     pdict = zip(df.name,df.picture)
     pdict=dict(pdict)
-    
-
     return render_template("picture.html",tables=[df.to_html()],titles=['name','income','comments'],image_name=pdict)
- 
+
+@app.route('/upload', methods = ["GET","POST"])
+def upload():
+    if request.method == 'POST':
+        img = request.files['file']
+        #if img and allowed_file(img.filename):
+        filename = secure_filename(img.filename)
+        img.save(filename)
+        blob_client = blob_service_client.get_blob_client(container = container, blob = filename)
+        with open(filename, "rb") as data:
+                try:
+                    blob_client.upload_blob(data, overwrite=True)
+                    #msg = "Upload Done ! "
+                except:
+                    pass
+        #os.remove(filename)
+    return render_template("upload.html")
+
 if __name__ == "__main__":
     app.run(debug = True)
