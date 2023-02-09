@@ -1,11 +1,11 @@
 num,name,year,picture,comments
-10,car,1995,car.jpg,nice blue car
-12,bob,1776, ,bob is a common name
-13,cindy,2023,comp.jpg,cindy is smart and hard working
-15, ,2023, dave.jpg,dave is really not too smart
-100,eve,-1, , 
-100,fred,1454,,fred is in a class of his own
-101,silas,2020,sign.jpg,what does this sign mean
-202,,2020,mice.jpg,
+10,car,1995.0,car.jpg,nice blue car
+12,bob,1776.0,No_Picture.jpg,bob is a common name
+13,cindy,2023.0,comp.jpg,cindy is smart and hard working
+15, ,2023.0, dave.jpg,dave is really not too smart
+100,eve,-1.0,No_Picture.jpg, 
+100,fred,1454.0,,fred is in a class of his own
+101,silas,2020.0,sign.jpg,what does this sign mean
+202,,2020.0,mice.jpg,
 209,dan,,,dan is very very smart
-500,curly,1950,,curly is also very smart
+500,curly,1950.0,,curly is also very smart
