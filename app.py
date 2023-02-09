@@ -29,13 +29,34 @@ allowed_ext = app.config['ALLOWED_EXTENSIONS'] # List of accepted extensions
 blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
 @app.route('/', methods = ["GET","POST"])
-def hello_world():
-    photo_name = 'm-1.jpg'
+def Name():
+    photo_name = 'd-1.jpg'
     image = Image.open(photo_name)
     data=io.BytesIO()
     image.save(data,"JPEG")
     encoded_img_data = base64.b64encode(data.getvalue())
-    return render_template("Name.html",photo_name=encoded_img_data.decode('UTF-8'))
+    p = encoded_img_data.decode('UTF-8')
+    return render_template("Name.html",photo_name=p)
+
+@app.route('/user', methods = ["POST"])
+def user():
+    df = pd.read_csv("data-1.csv",on_bad_lines='skip')
+    name = request.form["name"]
+    for i in df["name"]:
+        if i !=name:
+            next
+        elif i ==name:
+            pdict = zip(df.name,df.picture)
+            pdict=dict(pdict)
+            state = df[df["name"]==i]["class"].values[0]
+            print("{}'s class is {}".format(i,state)) 
+            photo_name = pdict[i]
+            image = Image.open(photo_name)
+            data=io.BytesIO()
+            image.save(data,"JPEG")
+            encoded_img_data = base64.b64encode(data.getvalue())
+            return render_template('user.html',user=name,state=state,photo_name=encoded_img_data.decode('utf-8')) 
+        return render_template('not_found.html')
 
 @app.route('/get_salary', methods = ["GET", "POST"])
 def salary_input():
@@ -43,12 +64,15 @@ def salary_input():
 
 @app.route('/salary', methods = ["POST"])
 def salary():
+    
     df_op = pd.DataFrame()
     sal = request.form["sal"].isdigit()
-    df = pd.read_csv("data-1.csv", converters={'income': int})
-    df['income'] = df['income'].fillna(0)
+    sal1 = request.form["sal1"].isdigit()
+    df = pd.read_csv("data-1.csv",on_bad_lines='skip')
+    #df = pd.read_csv("data-1.csv", converters={'income': int})
+    #df['income'] = df['income'].fillna(0)
     #df['income'] = pd.to_numeric(df['income'])
-    df_op = df.loc[(df['income'] >= 0) & (df['income'] <= sal)]
+    df_op = df.loc[(df['num'] >= sal) & (df['num'] <= sal1)]
     return render_template('salary.html',tables = [df_op.to_html()], titles=['name','income','comments'])
 
 @app.route('/nameinc', methods = ["GET", "POST"])
@@ -57,32 +81,27 @@ def nameinc_input():
 
 @app.route('/update', methods = ["GET", "POST"])
 def nameinc():
-    df = pd.read_csv("data-1.csv")
+    df = pd.read_csv("data-1.csv",on_bad_lines='skip')
     df_op = pd.DataFrame()
     name = request.form["name"]
-    inc = request.form["sal1"]
+    year = request.form["sal1"]
     comments = request.form["text"]
     #df_op = df.loc[df.name == name, ['name','income', 'comments']] = name,inc, comments
-    df.loc[df.name == name, ['name','income', 'comments']] = name,inc, comments
+    df.loc[df.name == name, ['name','year', 'comments']] = name,year, comments
     df.to_csv ("data-1.csv", index = None, header=True)
-    return render_template('update.html',name=name,tables=[df.to_html()],titles=['name','income','comments'],comments=comments)
+    return render_template('update.html',name=name,tables=[df.to_html()],titles=['name','year','comments'],comments=comments)
 
 @app.route('/picture', methods = ["GET","POST"])
 def picture():
+
+    
     df = pd.read_csv("data-1.csv",on_bad_lines='skip')
-    photo_list = ['m-1.jpg','b-1.jpg']
-    N = 'dar.jpg'
-    df.loc[df.picture == ' ', ['picture']] = N
-    for p in photo_list:   
-            image = Image.open(p)
-            data=io.BytesIO()
-            image.save(data,"JPEG")
-            enc_img = base64.b64encode(data.getvalue())
-            #df_op['Picture_new']=enc_img.decode('UTF-8')
-            enc_img = base64.b64encode(data.getvalue())
-            
-            return render_template('picture.html', photo_list = enc_img.decode('UTF-8'))
-
-
+    df.loc[df.picture == ' ', 'picture'] = 'No_Picture.jpg'
+    df.loc[df.picture == 'Nan', 'picture'] = 'No_Picture.jpg'
+    df.to_csv ("data-1.csv", index = None, header=True)
+    pdict = zip(df.name,df.picture)
+    pdict=dict(pdict)
+    return render_template("picture.html",tables=[df.to_html()],titles=['name','year','comments'],image_name=pdict)
+ 
 if __name__ == "__main__":
- app.run(host='0.0.0.0', port=8000, debug = True)
+    app.run(debug = True)
