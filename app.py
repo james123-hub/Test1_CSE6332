@@ -30,7 +30,7 @@ blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
 @app.route('/', methods = ["GET","POST"])
 def Name():
-    photo_name = 'm-1.jpg'
+    photo_name = 'dave.jpg'
     image = Image.open(photo_name)
     data=io.BytesIO()
     image.save(data,"JPEG")
