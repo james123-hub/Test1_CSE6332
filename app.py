@@ -36,7 +36,7 @@ def Name():
     image.save(data,"JPEG")
     encoded_img_data = base64.b64encode(data.getvalue())
     p = encoded_img_data.decode('UTF-8')
-    return render_template("Name.html",photo_name=p)
+    return render_template('Name.html',photo_name=p)
 
 @app.route('/user', methods = ["POST"])
 def user():
