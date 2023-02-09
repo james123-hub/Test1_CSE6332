@@ -69,7 +69,7 @@ def salary():
     sal = request.form["sal"].isdigit()
     sal1 = request.form["sal1"].isdigit()
     df = pd.read_csv("data-1.csv",on_bad_lines='skip')
-    #df = pd.read_csv("data-1.csv", converters={'income': int})
+    df = pd.read_csv("data-1.csv", converters={'income': int})
     #df['income'] = df['income'].fillna(0)
     #df['income'] = pd.to_numeric(df['income'])
     df_op = df.loc[(df['num'] >= sal) & (df['num'] <= sal1)]
