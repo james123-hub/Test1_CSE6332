@@ -30,7 +30,7 @@ blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 
 @app.route('/', methods = ["GET","POST"])
 def Name():
-    photo_name = 'd-1.jpg'
+    photo_name = 'car.jpg'
     image = Image.open(photo_name)
     data=io.BytesIO()
     image.save(data,"JPEG")
@@ -40,7 +40,7 @@ def Name():
 
 @app.route('/user', methods = ["POST"])
 def user():
-    df = pd.read_csv("data-1.csv",on_bad_lines='skip')
+    df = pd.read_csv("q0c.csv",on_bad_lines='skip')
     name = request.form["name"]
     for i in df["name"]:
         if i !=name:
@@ -69,11 +69,11 @@ def salary():
     sal = request.form["sal"].isdigit()
     sal1 = request.form["sal1"].isdigit()
     df = pd.read_csv("data-1.csv",on_bad_lines='skip')
-    df = pd.read_csv("data-1.csv", converters={'income': int})
+    df = pd.read_csv("data-1.csv", converters={'num': int})
     #df['income'] = df['income'].fillna(0)
     #df['income'] = pd.to_numeric(df['income'])
     df_op = df.loc[(df['num'] >= sal) & (df['num'] <= sal1)]
-    return render_template('salary.html',tables = [df_op.to_html()], titles=['name','income','comments'])
+    return render_template('salary.html',tables = [df_op.to_html()], titles=['num','name','year','picture','comments'])
 
 @app.route('/nameinc', methods = ["GET", "POST"])
 def nameinc_input():
@@ -95,10 +95,10 @@ def nameinc():
 def picture():
 
     
-    df = pd.read_csv("data-1.csv",on_bad_lines='skip')
+    df = pd.read_csv("q0c.csv",on_bad_lines='skip')
     df.loc[df.picture == ' ', 'picture'] = 'No_Picture.jpg'
     df.loc[df.picture == 'Nan', 'picture'] = 'No_Picture.jpg'
-    df.to_csv ("data-1.csv", index = None, header=True)
+    df.to_csv ("q0c.csv", index = None, header=True)
     pdict = zip(df.name,df.picture)
     pdict=dict(pdict)
     return render_template("picture.html",tables=[df.to_html()],titles=['name','year','comments'],image_name=pdict)
