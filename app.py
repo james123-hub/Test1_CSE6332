@@ -58,38 +58,50 @@ def user():
             return render_template('user.html',user=name,state=state,photo_name=encoded_img_data.decode('utf-8')) 
         return render_template('not_found.html')
 
-@app.route('/get_salary', methods = ["GET", "POST"])
-def salary_input():
-    return render_template('get_salary.html')
+@app.route('/get_room', methods = ["GET", "POST"])
+def room_input():
+    return render_template('get_room.html')
 
-@app.route('/salary', methods = ["POST"])
-def salary():
+@app.route('/room', methods = ["POST"])
+def room():
     
     df_op = pd.DataFrame()
-    sal = request.form["sal"].isdigit()
-    sal1 = request.form["sal1"].isdigit()
-    df = pd.read_csv("data-1.csv",on_bad_lines='skip')
-    df = pd.read_csv("data-1.csv", converters={'num': int})
+    room = request.form["room"].isdigit()
+    df = pd.read_csv("q0c.csv", converters={'room': int},on_bad_lines='skip')
     #df['income'] = df['income'].fillna(0)
     #df['income'] = pd.to_numeric(df['income'])
-    df_op = df.loc[(df['num'] >= sal) & (df['num'] <= sal1)]
-    return render_template('salary.html',tables = [df_op.to_html()], titles=['num','name','year','picture','comments'])
+    df_op = df.loc[df['room'] == room]
+    return render_template('room.html',tables = [df_op.to_html()], titles=['name','pic','descript'])
+@app.route('/get_number', methods = ["GET", "POST"])
+def number_input():
+    return render_template('get_number.html')
 
+@app.route('/number', methods = ["POST"])
+def number():
+    
+    df_op = pd.DataFrame()
+    min1 = request.form["min"].isdigit()
+    max1=request.form["max"].isdigit()
+    df = pd.read_csv("q0c.csv", converters={'teln': int},on_bad_lines='skip')
+    #df['income'] = df['income'].fillna(0)
+    #df['income'] = pd.to_numeric(df['income'])
+    df_op = df.loc[(df['teln']>=min1)& (df['teln']<=max1)]
+    return render_template('number.html',tables = [df_op.to_html()], titles=['name','teln','pic','descript'])
 @app.route('/nameinc', methods = ["GET", "POST"])
 def nameinc_input():
     return render_template('nameinc.html')
 
 @app.route('/update', methods = ["GET", "POST"])
 def nameinc():
-    df = pd.read_csv("data-1.csv",on_bad_lines='skip')
+    df = pd.read_csv("q0c.csv",on_bad_lines='skip')
     df_op = pd.DataFrame()
-    name = request.form["name"]
-    year = request.form["sal1"]
+    teln = request.form["teln"]
     comments = request.form["text"]
+    new_row={'room':'','teln':teln,'pic':'','descript':comments}
     #df_op = df.loc[df.name == name, ['name','income', 'comments']] = name,inc, comments
-    df.loc[df.name == name, ['name','year', 'comments']] = name,year, comments
-    df.to_csv ("data-1.csv", index = None, header=True)
-    return render_template('update.html',name=name,tables=[df.to_html()],titles=['name','year','comments'],comments=comments)
+    df = df.append(new_row, ignore_index=True)
+    df.to_csv ("q0c.cs", index = False)
+    return render_template('update.html',tables=[df.to_html()],titles=['name','teln','pic','descript'])
 
 @app.route('/picture', methods = ["GET","POST"])
 def picture():

@@ -1,15 +1,25 @@
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <h1>Kuang Zou</h1>
+	  <h1>01155</h1>               
+    </head>
     <body>
-        <form>
-            <p>
-                <label> Key words for {{name}} have been updated</label>
-                {% for table in tables %}    
+        <div align="center">
+            <table>
+                <h1>
+                <!--Displaying the converted table-->
+                     {% for table in tables %}
+                    <h2>{{titles[loop.index]}}</h2>  
+                             
                     {{ table|safe }}
-                    {% endfor %}
-                        
-                {{comments}}
-            </p>
-        </form>
+                    {% endfor %}  
+
+                    
+                    </ul>     
+                </h1> 
+            </table>
+        </div>
     </body>
 </html>
