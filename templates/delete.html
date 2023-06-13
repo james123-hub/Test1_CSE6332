@@ -1,0 +1,19 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <header>
+        <h1 style="text-align: center;">Assignment 1</h1>       
+    </header>
+    <body>
+        <div align="center">
+            <h1>People</h1>
+            <table>
+                <!--Displaying the converted table-->
+                    {% for table in tables %}         
+                    {{ table|safe }}
+                    {% endfor %}      
+            </table>
+            <p>{{info}}</p>
+        </div>
+    </body>
+</html>
